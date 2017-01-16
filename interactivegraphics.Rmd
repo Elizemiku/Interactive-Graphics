@@ -80,10 +80,19 @@ ggplotly(p)
 
 ```{r, echo=FALSE}
 set.seed(1234)
+a<-rnorm(50)
+a2 <- rnorm(50, 1)
 
-plot_ly(y = rnorm(50), type = 'box') %>%
-    add_trace(y = rnorm(50, 1)) %>%
-layout(title = 'Box Plot',xaxis = list(title = "cond", showgrid = F), yaxis = list(title = "rating"))          
+plot_ly(y = a, type = 'box') %>%
+    add_trace(y = a2) %>%
+layout(title = 'Box Plot',xaxis = list(title = "cond", showgrid = F), yaxis = list(title = "rating"), 
+       annotations = list(
+           x = -0.01,
+           y = boxplot.stats(a)$out, 
+           text = "Outlier",
+           showarrow = FALSE,
+           xanchor = "right"
+         ))     
 ```
 ---
 ##Highcharter
