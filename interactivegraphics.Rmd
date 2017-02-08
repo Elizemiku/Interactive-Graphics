@@ -55,11 +55,31 @@ Negative points
 
 See more in :
 
-[https://plot.ly/](About plotly)
+[https://plot.ly/](About plotly).
+
+[https://plot.ly/ggplot2/](About plotly with ggplot2)
 
 ---
 ## Using Plotly with ggplot2
 
+```{r, eval=FALSE}
+set.seed(1234)
+dat <- data.frame(
+    cond = factor(rep(c("trace 0", "trace 1"), each = 50)),
+    rating = c(rnorm(50), rnorm(50, mean = 1)))    
+
+p<-ggplot(dat, aes(x = cond, y = rating, fill = cond)) +
+    geom_boxplot() +
+    ggtitle("Box Plot") +
+    labs(fill="Condition") +
+    scale_fill_brewer(palette="Dark2") +
+    geom_text(label = 0) + annotate("text", label = "outlier", x= dat$cond[20], y = 2.6, size = 3, colour = "blue")
+    ##add name to the outlier 
+
+ggplotly(p)
+
+```
+---
 ```{r, echo=FALSE}
 set.seed(1234)
 dat <- data.frame(
@@ -69,15 +89,69 @@ dat <- data.frame(
 p<-ggplot(dat, aes(x = cond, y = rating, fill = cond)) +
     geom_boxplot() +
     ggtitle("Box Plot") +
+    labs(fill="Condition") +
+    scale_fill_brewer(palette="Dark2") +
     geom_text(label = 0) + annotate("text", label = "outlier", x= dat$cond[20], y = 2.6, size = 3, colour = "blue")
     ##add name to the outlier
 
 ggplotly(p)
 ```
 ---
-
+Box plot with Jittered Points
+```{r, eval = FALSE}
+set.seed(1234)
+dat<- data.frame(
+    cond = (rep(c("trace 0", "trace 1"), each = 50)),
+   rating = c(rnorm(50), rnorm(50, mean = 1))
+)
+ p<-ggplot(dat,aes(x = cond, y = rating, fill = cond)) +
+  geom_boxplot() +
+  ggtitle("Box plot") +
+  labs(fill="Condition") + 
+  scale_fill_brewer(palette="Accent") +
+  geom_point(position = position_jitter(width = 0.2)) 
+ 
+  ggplotly(p)
+  
+```
+---
+```{r, echo = FALSE}
+set.seed(1234)
+dat<- data.frame(
+   cond = (rep(c("trace 0", "trace 1"), each = 50)),
+   rating = c(rnorm(50), rnorm(50, mean = 1))
+)
+p<-ggplot(dat,aes(x = cond, y = rating, fill = cond)) +
+  geom_boxplot() +
+  ggtitle("Box plot") +
+  labs(fill="Condition") + 
+  scale_fill_brewer(palette="Accent") +
+  geom_point(position = position_jitter(width = 0.2)) 
+ 
+  ggplotly(p)
+  
+```
+---
 ## Same example without ggplot2
 
+```{r, eval=FALSE}
+set.seed(1234)
+a<-rnorm(50)
+a2 <- rnorm(50, 1)
+
+plot_ly(y = a, type = 'box') %>%
+    add_trace(y = a2) %>%
+layout(title = 'Box Plot',xaxis = list(title = "cond", showgrid = F), yaxis = list(title = "rating"), 
+       annotations = list(
+           x = -0.01,
+           y = boxplot.stats(a)$out, 
+           text = "Outlier",
+           showarrow = FALSE,
+           xanchor = "right"
+         ))
+
+```
+---
 ```{r, echo=FALSE}
 set.seed(1234)
 a<-rnorm(50)
@@ -92,7 +166,7 @@ layout(title = 'Box Plot',xaxis = list(title = "cond", showgrid = F), yaxis = li
            text = "Outlier",
            showarrow = FALSE,
            xanchor = "right"
-         ))     
+         ))       
 ```
 ---
 ##Highcharter
@@ -102,7 +176,8 @@ Benefits:
 - It is possible to configure your plots with pre-implemented themes like Economist, Financial Times, Google, and FiveThirtyEight among others
 - There are some Plugins: Motion, drag points, fontawesome, url-pattern, annotations.
 - Has more tools than plotly
-- The posibility to create or modify themes and customize in every way your chart: beatiful tooltips, titles, credits, legends, add plotlines or plotbands.
+- The posibility to create or modify themes and customize in every way your chart: beatiful tooltips, titles, credits, legends,
+add plotlines or plotbands.
 
 Negative points:
 - Because has more tools is more difficult, sometimes you need to use another package to modificate your data
@@ -115,12 +190,38 @@ See more in:
 [https://www.rstudio.com/rviews/2016/10/19/creating-interactive-plots-with-r-and-highcharts/](Examples Highcharts)
 
 [http://jkunst.com/highcharter/](About Highcharts)
+
+[https://github.com/jbkunst/highcharter/blob/master/vignettes/charting-data-frames.Rmd](News Highcharter)
+
 ---
 ##Using Highcharter
 
 Start with empty chart and add components
-
+```{r, eval = FALSE}
+set.seed(1234)
+dat <- data.frame(
+    cond = (rep(c("trace 0", "trace 1"), each = 50)),
+   rating = c(rnorm(50), rnorm(50, mean = 1))
+)
+  hcboxplot(x = dat$rating, var = dat$cond,name = "cond", showInLegend = TRUE) %>% 
+  hc_chart(type = "column") %>%
+  hc_title(text = "Box Plot") 
+```
+---
 ```{r, echo = FALSE}
+set.seed(1234)
+dat <- data.frame(
+    cond = (rep(c("trace 0", "trace 1"), each = 50)),
+   rating = c(rnorm(50), rnorm(50, mean = 1))
+)
+  hcboxplot(x = dat$rating, var = dat$cond, name = "cond", showInLegend = TRUE) %>% 
+  hc_chart(type = "column") %>%
+  hc_title(text = "Box Plot") 
+```
+---
+
+##It's possible modificate themes, colors and modificate the legend  
+```{r, eval = FALSE}
 set.seed(1234)
 dat <- data.frame(
     cond = (rep(c("trace 0", "trace 1"), each = 50)),
@@ -128,27 +229,42 @@ dat <- data.frame(
 )
 highchart() %>% 
   hc_title(text = "Box Plot") %>%
-  hc_add_series_boxplot(x = dat$rating, by = dat$cond, name = "cond") 
-  
+  hcboxplot(x = dat$rating, var = dat$cond, name = "cond", showInLegend = TRUE) %>% 
+  hc_chart(type = "column") %>%
+  hc_legend(align = "right", verticalAlign = "top",
+            layout = "vertical", x = 0, y = 100, enable = TRUE ) %>%
+ hc_add_theme(hc_theme_sandsignika())
 ```
 ---
-
-##It's possible modificate themes and colors 
-
 ```{r, echo = FALSE}
 set.seed(1234)
 dat <- data.frame(
     cond = (rep(c("trace 0", "trace 1"), each = 50)),
    rating = c(rnorm(50), rnorm(50, mean = 1))
 )
-highchart() %>% 
-  hc_title(text = "Box Plot") %>%    
-  hc_add_series_boxplot(x = dat$rating, by = dat$cond, name = "cond") %>% 
- hc_add_theme(hc_theme_sandsignika())
+  hcboxplot(x = dat$rating, var = dat$cond, name = "cond", showInLegend = TRUE) %>% 
+  hc_chart(type = "column") %>%
+  hc_legend(align = "right", verticalAlign = "top",
+            layout = "vertical", x = 0, y = 100, enable = TRUE ) %>%
+  hc_title(text = "Box Plot") %>%
+  hc_add_theme(hc_theme_sandsignika())
 ```
 ---
 ##Plotly with ggplot, geom_smooth Linear Regression
+```{r, eval = FALSE}
+set.seed(1234)
+dat <- data.frame(cond = rep(c("A", "B"), each=50),
+                  xvar = 1:50 + rnorm(50,sd=3),
+                  yvar = 1:50 + rnorm(50,sd=3))
 
+p<-ggplot(dat, aes(x=xvar, y=yvar)) +
+    geom_point(shape=1, colour = "red") +   
+    geom_smooth(method=lm) +
+    ggtitle("Linear Regression")
+
+ggplotly(p)
+```
+---
 ```{r, echo = FALSE}
 set.seed(1234)
 dat <- data.frame(cond = rep(c("A", "B"), each=50),
@@ -164,7 +280,29 @@ ggplotly(p)
 ```
 ---
 ##Linear regression using highcharts
+```{r, eval = FALSE}
+set.seed(1234)
+dat <- data.frame(cond = rep(c("A", "B"), each=50),
+                  xvar = 1:50 + rnorm(50,sd=3),
+                  yvar = 1:50 + rnorm(50,sd=3))
 
+library("broom")
+library("dplyr")
+fit<-lm(yvar ~ xvar, data = dat) %>% 
+  augment() %>% 
+  arrange(xvar)
+
+
+highchart() %>% 
+  hc_add_theme(hc_theme_google()) %>% 
+  hc_title(text = "scatter regression") %>% 
+  hc_add_series(dat, type = "scatter",  hcaes(x = xvar, y = yvar, group = cond),  maxSize = 5) %>% 
+  hc_add_series(fit, type = "arearange", hcaes(x = xvar,
+                   low = .fitted + .se.fit,
+                   high = .fitted -  .se.fit))
+
+```
+---
 ```{r, echo = FALSE}
 set.seed(1234)
 dat <- data.frame(cond = rep(c("A", "B"), each=50),
@@ -172,18 +310,18 @@ dat <- data.frame(cond = rep(c("A", "B"), each=50),
                   yvar = 1:50 + rnorm(50,sd=3))
 
 library("broom")
+library("dplyr")
 fit<-lm(yvar ~ xvar, data = dat) %>% 
   augment() %>% 
   arrange(xvar)
-  
+
 highchart() %>% 
   hc_add_theme(hc_theme_google()) %>% 
   hc_title(text = "scatter regression") %>% 
-  hc_add_series_df(dat, type = "scatter", x = xvar, y = yvar, group = cond) %>% 
-  hc_add_series_df(fit, type = "arearange",  
-                   x = xvar,
+  hc_add_series(dat, type = "scatter",  hcaes(x = xvar, y = yvar, group = cond),  maxSize = 5) %>% 
+  hc_add_series(fit, type = "arearange", hcaes(x = xvar,
                    low = .fitted + .se.fit,
-                   high = .fitted - .se.fit)
+                   high = .fitted -  .se.fit))
 ```
 ---
 ##Last Example
@@ -191,7 +329,22 @@ highchart() %>%
 ##three clusters, within which points are distributed according to a multivariate gaussian
  
 Plotly
+```{r, eval = FALSE}
+library("dplyr")
 
+set.seed(1234)
+centers <- data.frame(cluster=factor(1:3), size=c(100, 150, 50), x1=c(5, 0, -3), x2=c(-1, 1, -2))
+points <- centers %>% group_by(cluster) %>%
+    do(data.frame(x1=rnorm(.$size[1], .$x1[1]),
+                  x2=rnorm(.$size[1], .$x2[1])))
+
+p<-ggplot(points, aes(x1, x2, color=cluster)) + geom_point() + ggtitle("Multivariate gaussian")
+  
+ggplotly(p)
+
+
+```
+---
 ```{r, echo = FALSE}
 library("dplyr")
 
@@ -210,7 +363,22 @@ ggplotly(p)
 ##Last Example
 
 Highcharter
+```{r, eval = FALSE}
+library("dplyr")
 
+set.seed(1234)
+centers <- data.frame(cluster=factor(1:3), size=c(100, 150, 50), x1=c(5, 0, -3), x2=c(-1, 1, -2))
+points <- centers %>% group_by(cluster) %>%
+    do(data.frame(x1=rnorm(.$size[1], .$x1[1]),
+                  x2=rnorm(.$size[1], .$x2[1])))
+
+highchart() %>% 
+  hc_add_theme(hc_theme_smpl()) %>%
+  hc_title(text = "Multivariate gaussian") %>% 
+  hc_add_series(points, type = "scatter", hcaes(x = x1, y = x2, group = cluster)))
+  
+```
+---
 ```{r, echo = FALSE}
 library("dplyr")
 
@@ -223,9 +391,13 @@ points <- centers %>% group_by(cluster) %>%
 highchart() %>% 
   hc_add_theme(hc_theme_smpl()) %>%
   hc_title(text = "Multivariate gaussian") %>% 
-  hc_add_series_df(points, type = "scatter", x = x1, y = x2, group = cluster)
+  hc_add_series(points, type = "scatter", hcaes(x = x1, y = x2, group = cluster))
 ```
 ---
 
-Therefore, we note that the two packages are good each with its benefits and negatives points. It concludes that the use of each of them depends on the type of analysis that is done and what you want to demonstrate in your chart. Highcharter has many interesting themes that act on the beauty of the chart, its graphics are geared more to the final graph and not to analysis. Thus it is recommended to analyze your data first with the ggplot2 package, and then transform into interactive graph. In this matter plotly wins because it is easier to transform the graph of ggplot2 to ploty. The problem of plotly is that sometimes with the amount of graph data volume it does not support interactivity. However, plotly has more graphics focused on statistics than highcharter. The other packages presented are ways to improve your data and arrange them to take less work when plotting the graph. Especially when use highcharter to make statistical charts.
+Therefore, we note that the two packages are good each with its benefits and negatives points. It concludes that the use of each of them depends on the type of analysis that is done and what you want to demonstrate in your chart. Highcharter has many interesting themes that act on the beauty of the chart, its graphics are geared more to the final graph and not to analysis. Thus it is recommended to analyze your data first with the ggplot2 package, and then transform into interactive graph. In this matter plotly wins because it is easier to transform the graph of ggplot2 to ploty. The problem of plotly is that sometimes with the amount of graph data volume it does not support interactivity. However, plotly has more graphics focused on statistics than highcharter. The other packages presented are ways to improve your data and arrange them to take less work when plotting the graph. Especially when use highcharter to make statistical charts. The latest highchart update was very promising, focused on the style of the ggplot2 package. 
+
+
+
+
 
