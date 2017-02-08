@@ -182,7 +182,6 @@ add plotlines or plotbands.
 Negative points:
 - Because has more tools is more difficult, sometimes you need to use another package to modificate your data
 - The grapich is interactive but doesn't have the bar with tools like plotly
-- In Highcharts there is no function for calculate a simple linear regression, you need to calculate on your own
 
 ---
 See more in:
