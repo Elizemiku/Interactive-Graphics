@@ -53,9 +53,10 @@ Negative points
 - Complicated to work with a large volume of data
 - When use ggplot2 with plotly, ggplot2 doesn't know how to deal with data of class numeric
 
+---
 See more in :
 
-[https://plot.ly/](About plotly).
+[https://plot.ly/](About plotly)
 
 [https://plot.ly/ggplot2/](About plotly with ggplot2)
 
@@ -68,14 +69,19 @@ dat <- data.frame(
     cond = factor(rep(c("trace 0", "trace 1"), each = 50)),
     rating = c(rnorm(50), rnorm(50, mean = 1)))    
 
+mytheme <- theme_dark() + 
+    theme(text = element_text(colour="blue"), axis.title = element_text(size = rel(1.25)))
+    #creating my own theme
+    
 p<-ggplot(dat, aes(x = cond, y = rating, fill = cond)) +
     geom_boxplot() +
     ggtitle("Box Plot") +
     labs(fill="Condition") +
     scale_fill_brewer(palette="Dark2") +
-    geom_text(label = 0) + annotate("text", label = "outlier", x= dat$cond[20], y = 2.6, size = 3, colour = "blue")
+    geom_text(label = 0) + annotate("text", label = "outlier", x= dat$cond[20], y = 2.6, size = 3, colour = "blue") +
     ##add name to the outlier 
-
+    mytheme
+    
 ggplotly(p)
 
 ```
@@ -86,14 +92,19 @@ dat <- data.frame(
     cond = factor(rep(c("trace 0", "trace 1"), each = 50)),
     rating = c(rnorm(50), rnorm(50, mean = 1)))    
 
+mytheme <- theme_dark() + 
+    theme(text = element_text(colour="blue"), axis.title = element_text(size = rel(1.25)))
+    #creating my own theme
+    
 p<-ggplot(dat, aes(x = cond, y = rating, fill = cond)) +
     geom_boxplot() +
     ggtitle("Box Plot") +
     labs(fill="Condition") +
     scale_fill_brewer(palette="Dark2") +
-    geom_text(label = 0) + annotate("text", label = "outlier", x= dat$cond[20], y = 2.6, size = 3, colour = "blue")
-    ##add name to the outlier
-
+    geom_text(label = 0) + annotate("text", label = "outlier", x= dat$cond[20], y = 2.6, size = 3, colour = "blue") +
+    ##add name to the outlier 
+    mytheme
+    
 ggplotly(p)
 ```
 ---
@@ -109,7 +120,10 @@ dat<- data.frame(
   ggtitle("Box plot") +
   labs(fill="Condition") + 
   scale_fill_brewer(palette="Accent") +
-  geom_point(position = position_jitter(width = 0.2)) 
+  geom_point(position = position_jitter(width = 0.2))+
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
  
   ggplotly(p)
   
@@ -126,7 +140,10 @@ p<-ggplot(dat,aes(x = cond, y = rating, fill = cond)) +
   ggtitle("Box plot") +
   labs(fill="Condition") + 
   scale_fill_brewer(palette="Accent") +
-  geom_point(position = position_jitter(width = 0.2)) 
+  geom_point(position = position_jitter(width = 0.2)) +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
  
   ggplotly(p)
   
@@ -182,7 +199,7 @@ add plotlines or plotbands.
 Negative points:
 - Because has more tools is more difficult, sometimes you need to use another package to modificate your data
 - The grapich is interactive but doesn't have the bar with tools like plotly
-
+- In Highcharts there is no function for calculate a simple linear regression, you need to calculate on your own
 ---
 See more in:
 
@@ -191,7 +208,6 @@ See more in:
 [http://jkunst.com/highcharter/](About Highcharts)
 
 [https://github.com/jbkunst/highcharter/blob/master/vignettes/charting-data-frames.Rmd](News Highcharter)
-
 ---
 ##Using Highcharter
 
@@ -374,7 +390,7 @@ points <- centers %>% group_by(cluster) %>%
 highchart() %>% 
   hc_add_theme(hc_theme_smpl()) %>%
   hc_title(text = "Multivariate gaussian") %>% 
-  hc_add_series(points, type = "scatter", hcaes(x = x1, y = x2, group = cluster)))
+  hc_add_series(points, type = "scatter", hcaes(x = x1, y = x2, group = cluster), showInLegend = TRUE)
   
 ```
 ---
@@ -390,7 +406,7 @@ points <- centers %>% group_by(cluster) %>%
 highchart() %>% 
   hc_add_theme(hc_theme_smpl()) %>%
   hc_title(text = "Multivariate gaussian") %>% 
-  hc_add_series(points, type = "scatter", hcaes(x = x1, y = x2, group = cluster))
+  hc_add_series(points, type = "scatter", hcaes(x = x1, y = x2, group = cluster), showInLegend = TRUE)
 ```
 ---
 
