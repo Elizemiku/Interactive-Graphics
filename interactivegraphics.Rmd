@@ -193,13 +193,12 @@ Benefits:
 - It is possible to configure your plots with pre-implemented themes like Economist, Financial Times, Google, and FiveThirtyEight among others
 - There are some Plugins: Motion, drag points, fontawesome, url-pattern, annotations.
 - Has more tools than plotly
-- The posibility to create or modify themes and customize in every way your chart: beatiful tooltips, titles, credits, legends,
-add plotlines or plotbands.
+- The posibility to create or modify themes and customize in every way your chart: beatiful tooltips, titles, credits, legends, add plotlines or plotbands.
 
 Negative points:
 - Because has more tools is more difficult, sometimes you need to use another package to modificate your data
 - The grapich is interactive but doesn't have the bar with tools like plotly
-- In Highcharts there is no function for calculate a simple linear regression, you need to calculate on your own
+
 ---
 See more in:
 
